@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/interval';
 import 'rxjs/add/operator/takeWhile';
 import 'rxjs/add/operator/distinctUntilChanged';
+//import 'rxjs/add/operator/operator/share';
 import { rmxUtils } from './xmpp-rmx-utils';
 import { rmxMsg } from './xmpp-rmx-message';
 import { rmxIntf } from './xmpp-rmx-interfaces';
@@ -83,17 +84,17 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessage> {
       this.SetXmppStatus(0);
     });
     this.xmppClient.on('raw:incoming', function (xml) {
-      console.log('raw:incoming');
-      console.log(xml);
+      //console.log('raw:incoming');
+      //console.log(xml);
     });
     this.xmppClient.on('raw:outgoing', function (xml) {
-      console.log('raw:outgoing');
-      console.log(xml);
+      //console.log('raw:outgoing');
+      //console.log(xml);
     });
     this.xmppClient.on('message', (message) => {
-      console.log(message);
+      //console.log(message);
       const s: string = message.body;
-      console.log(s);
+      //console.log(s);
       const msg = new rmxMsg.XmppRmxMessage(s);
       console.log(msg);
       if (msg.cmd === 'MEDIATOR_OK') {
@@ -187,14 +188,14 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessage> {
    * @param data
    */
   public sendMsg(desti: string, cmd: string, data: string): void {
-    console.log('XmppWebsocket:sendMsg', this.xmppStatus);
+    //console.log('XmppWebsocket:sendMsg', this.xmppStatus);
     try {
         const my = this.getMyFullName();
         const msg = new rmxMsg.XmppRmxMessageOut();
         msg.buildCmd(this.xmppMediator.full || my , cmd, my);
         msg.body += '<L:1>';
         msg.body += data;
-        console.log(msg);
+        //console.log(msg);
         this.xmppClient.sendMessage(msg);
     } catch (err) {
         /// in case of an error with a loss of connection, we restore it
@@ -224,7 +225,7 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessage> {
    * @param data
    */
   public sendMsg2Mediator(cmd: string, data: string): void {
-    console.log('XmppWebsocket:sendMsg2Mediator', this.xmppStatus);
+    //console.log('XmppWebsocket:sendMsg2Mediator', this.xmppStatus);
     try {
         const msg = new rmxMsg.XmppRmxMessageOut();
         msg.buildMediatorCmd(this.xmppMediator, cmd, this.getMyFullName());
