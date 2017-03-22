@@ -31,16 +31,7 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessage> {
   private reconnectionObservable: Observable<number> = null;
   private connectionObserver: Observer<number>;
   public connectionStatus: Observable<number>;
-
-  private xmppParam: rmxIntf.IxmppRmxConnectParams = {
-    jid: 'carlos-xe7@vpn.restomax.com',
-    password: 'carlos-xe7',
-    resource: 'testX' + Math.random().toString(36).substring(7),
-    transport: 'websocket',
-    server: 'vpn.restomax.com',
-    wsURL: 'ws://vpn.restomax.com:7070/ws/',
-    sasl: ['digest-md5', 'plain'],
-    };
+  private xmppParam: rmxIntf.IxmppRmxConnectParams;
 
   /// ..................................................................................................................
   constructor() {
@@ -56,11 +47,12 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessage> {
   /**
    * create and connect
    */
-  public init(): void {
+  public init(xmppParam: rmxIntf.IxmppRmxConnectParams): void {
     // already started
     if (this.xmppClient) {
       return;
-      }
+    }
+    this.xmppParam = xmppParam;
     /// create stanza.io xmppClient and map event to myself
     this.xmppClient = stanzaio.createClient(this.xmppParam);
     this.xmppClient.on('connected',  (e, err) => this.SetXmppStatus(1));
