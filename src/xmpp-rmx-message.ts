@@ -58,7 +58,7 @@ export namespace rmxMsg {
       
       let MsgDataFmt = null;
       let MsgData    = null;
-      let match = XmppRmxMessage.reXMLData.exec(rawMessage);
+      let match = XmppRmxMessageIn.reXMLData.exec(rawMessage);
       if (match) {
         MsgDataFmt   = rawMessage.substr(match.index + 2, match[0].length - 3);
         MsgData      = rawMessage.substr(match.index + match[0].length);
@@ -66,7 +66,7 @@ export namespace rmxMsg {
       }
       
       // To use RegEx group[2] (<)(data)(>)
-      if (match = XmppRmxMessage.reSplit.exec(rawMessage)) {
+      if (match = XmppRmxMessageIn.reSplit.exec(rawMessage)) {
         this.to = match[2].toLowerCase();
       } else {
         this.data = 'Missing Msg <To>';
@@ -74,7 +74,7 @@ export namespace rmxMsg {
       }
       
       // Cmd
-      if (match = XmppRmxMessage.reSplit.exec(rawMessage)) {
+      if (match = XmppRmxMessageIn.reSplit.exec(rawMessage)) {
         this.cmd = match[2].toUpperCase();
       } else {
         this.data = 'Missing Msg <cmd>';
@@ -82,7 +82,7 @@ export namespace rmxMsg {
       }
       
       // From
-      if (match = XmppRmxMessage.reSplit.exec(rawMessage)) {
+      if (match = XmppRmxMessageIn.reSplit.exec(rawMessage)) {
         this.from = match[2].toLowerCase();
       } else {
         this.data = 'Missing Msg <From>';
@@ -91,7 +91,7 @@ export namespace rmxMsg {
       
       // Misc Params key:value
       let cnt = 0;
-      while (match = XmppRmxMessage.reSplit.exec(rawMessage)) {
+      while (match = XmppRmxMessageIn.reSplit.exec(rawMessage)) {
         const s = match[2].indexOf(':');
         if (s >= 1) {
           const key        = match[2].substr(0, s);
