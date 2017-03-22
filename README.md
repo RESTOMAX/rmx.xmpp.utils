@@ -20,8 +20,7 @@ npm install --save https://github.com/RESTOMAX/rmx.xmpp.utils.git
 
 
 # How to use
-
-  Events Subscribes
+Events Subscribes
   
   1. connectionStatus:
       
@@ -36,7 +35,6 @@ xmpp.connectionStatus.subscribe(
 );
 ```
 
-
 Connection states:
  -9: Error,
  -1: AuthError,
@@ -47,13 +45,20 @@ Connection states:
  4: Mediator OK,
   
   
-  
-  Public methods
+Public methods
   
   1. Initialize xmpp connection
   
 ```bash
-xmpp.Init():void;
+xmpp.Init({
+    jid: 'yourLogin',
+    password: '*******',
+    resource: Math.random().toString(36).substring(7),
+    transport: 'websocket',
+    server: 'your.domain.com',
+    wsURL: 'ws://your.domain.com:7070/ws/',
+    sasl: ['digest-md5', 'plain'],
+}):void;
 ```
 
   2. Send an helo to a receiver:
@@ -62,16 +67,16 @@ xmpp.Init():void;
 xmpp.Helo(Destination:String):void;
 ```
 
-  3. Send an helo to Mediator
+  3. Send an helo to Mediator to see and select an online mediator
   
 ```bash
 xmpp.helo2Mediator():void;
 ```
 
-  4. Send a message to a receiver:
+  4. Send a message to a receiver
 
 ```bash
-xmpp.sendMsg(destination:String, Command:String, Data:String):void;
+xmpp.sendMsg(Destination:String, Command:String, Data:String):void;
 ```
 
   4. Send a message to Mediator
