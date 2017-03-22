@@ -11,7 +11,7 @@ import { rmxMsg } from './xmpp-rmx-message';
 import { rmxIntf } from './xmpp-rmx-interfaces';
 
 /// we inherit from the ordinary Subject
-export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessage> {
+export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessageIn> {
 
   public static readonly statusDesc = {
       '-9': 'Error'
@@ -88,7 +88,7 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessage> {
       //console.log(message);
       const s: string = message.body;
       //console.log(s);
-      const msg = new rmxMsg.XmppRmxMessage(s);
+      const msg = new rmxMsg.XmppRmxMessageIn(s);
       console.log(msg);
       if (msg.cmd === 'MEDIATOR_OK') {
         this.xmppMediator = message.from;

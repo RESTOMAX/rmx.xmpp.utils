@@ -9,7 +9,7 @@ export namespace rmxMsg {
   /**
    * XmppRmxMessage
    */
-  export class XmppRmxMessage implements rmxIntf.IxmppRmxMessage {
+  export class XmppRmxMessageIn implements rmxIntf.IxmppRmxMessageIn {
     
     private static reSplit   = /(<)([^?>]*)(>)/g;
     private static reXMLData = /<\?TXT>|<\?JSON>|<\?XML>/i;

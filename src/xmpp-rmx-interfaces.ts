@@ -17,7 +17,7 @@ export namespace rmxIntf {
   /**
    * IxmppRmxMessage
    */
-  export interface IxmppRmxMessage {
+  export interface IxmppRmxMessageIn {
     from: string;
     cmd: string;
     to: string;
