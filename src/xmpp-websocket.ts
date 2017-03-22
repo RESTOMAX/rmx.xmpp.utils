@@ -1,6 +1,7 @@
 import { Subject } from 'rxjs/Subject';
 import { Observer } from 'rxjs/Observer';
 import { Observable } from 'rxjs/Observable';
+import * as stanzaio from 'stanza.io';
 import 'rxjs/add/observable/interval';
 import 'rxjs/add/operator/takeWhile';
 import 'rxjs/add/operator/distinctUntilChanged';
@@ -61,7 +62,7 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessage> {
       return;
       }
     /// create stanza.io xmppClient and map event to myself
-    this.xmppClient = require('stanza.io').createClient(this.xmppParam);
+    this.xmppClient = stanzaio.createClient(this.xmppParam);
     this.xmppClient.on('connected',  (e, err) => this.SetXmppStatus(1));
     this.xmppClient.on('auth:failed',  ( ) => {
       console.log('auth:failed');
