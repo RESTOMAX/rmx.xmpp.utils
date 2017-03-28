@@ -5,10 +5,12 @@ export namespace rmxIntf {
    */
   export interface IxmppRmxConnectParams {
     jid: string;
+    login: string;
     password: string;
     resource: string;
     transport: string;
     server: string;
+    timeout?: number;
     wsURL: string;
     sasl: Array<string>;
   }

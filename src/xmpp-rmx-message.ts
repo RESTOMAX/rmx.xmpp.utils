@@ -45,7 +45,6 @@ export namespace rmxMsg {
       this.to        = null;
       this.params    = {};
       this.rawparams = {};
-      
       this.dataFmt   = null;
       this.data      = null;
       
@@ -67,7 +66,7 @@ export namespace rmxMsg {
       
       // To use RegEx group[2] (<)(data)(>)
       if (match = XmppRmxMessageIn.reSplit.exec(rawMessage)) {
-        this.to = match[2].toLowerCase();
+        this.to = match[2];
       } else {
         this.data = 'Missing Msg <To>';
         return false;
@@ -75,7 +74,7 @@ export namespace rmxMsg {
       
       // Cmd
       if (match = XmppRmxMessageIn.reSplit.exec(rawMessage)) {
-        this.cmd = match[2].toUpperCase();
+        this.cmd = match[2];
       } else {
         this.data = 'Missing Msg <cmd>';
         return false;
@@ -83,7 +82,7 @@ export namespace rmxMsg {
       
       // From
       if (match = XmppRmxMessageIn.reSplit.exec(rawMessage)) {
-        this.from = match[2].toLowerCase();
+        this.from = match[2];
       } else {
         this.data = 'Missing Msg <From>';
         return false;
@@ -102,7 +101,7 @@ export namespace rmxMsg {
         }
       }
       
-      if (this.cmd === 'ERROR') {
+      if (this.cmd === 'ERROR' || this.cmd === 'PEERERROR') {
         //console.log(this.params)
         this.data    = MsgData || 'Error : ' + this.params['M'] + ' Code : ' + this.params['E'];
         this.dataFmt = MsgDataFmt || 'TXT';
@@ -180,21 +179,30 @@ export namespace rmxMsg {
     public buildMediatorHelo(Mediator: any, My: string): void {
       
       // send helo to ALL mediator
-      this.to = (Mediator ? Mediator.bare : 'mediator@vpn.restomax.com');
+      this.to = (Mediator && Mediator.bare ? Mediator.bare : 'mediator@vpn.restomax.com');
       
-      this.body = '<';
-      this.body += (Mediator ? Mediator.bare : 'mediator') + '>';
+      this.body = '<' + (Mediator && Mediator.bare ? Mediator.bare : 'mediator') + '>';
       this.body += '<MEDIATOR_HELO>';
       this.body += '<' + My + '>';
+    }
+
+    public buildLoginCreator(Mediator: any, My: string, Login: string): void {
+      
+      // send helo to ALL mediator
+      this.to = (Mediator ? Mediator : 'mediator@vpn.restomax.com');
+      
+      this.body = '<' + (Mediator ? Mediator : 'mediator') + '>';
+      this.body += '<CJL>';
+      this.body += '<' + Login + '>';
+      this.body += '<p:' + My + '>';
     }
     
     public buildMediatorCmd(Mediator: any, Cmd: string, My: string): void {
       
       // send cmd to MY mediator
-      this.to = (Mediator ? Mediator.full : 'mediator@vpn.restomax.com');
+      this.to = (Mediator && Mediator.full ? Mediator.full : 'mediator@vpn.restomax.com');
       
-      this.body = '<';
-      this.body += (Mediator ? Mediator.bare : 'mediator') + '>';
+      this.body = '<' + (Mediator && Mediator.bare ? Mediator.bare : 'mediator') + '>';
       this.body += '<' + (Cmd ? Cmd : 'ASK_VIEW') + '>';
       this.body += '<' + My + '>';
     }
