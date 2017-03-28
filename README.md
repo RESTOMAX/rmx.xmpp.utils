@@ -51,6 +51,7 @@ Public methods
   
 ```bash
 // xmpp.Init(xmppParam, peerinfoXmppParam)
+
 xmpp.Init({
     jid: 'yourLogin',
     password: '*******',
