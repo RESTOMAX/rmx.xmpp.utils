@@ -50,14 +50,25 @@ Public methods
   1. Initialize xmpp connection
   
 ```bash
+// xmpp.Init(xmppParam, peerinfoXmppParam)
 xmpp.Init({
     jid: 'yourLogin',
     password: '*******',
     resource: Math.random().toString(36).substring(7),
     transport: 'websocket',
     server: 'your.domain.com',
+    timeout: 2,
     wsURL: 'ws://your.domain.com:7070/ws/',
-    sasl: ['digest-md5', 'plain'],
+    sasl: ['digest-md5', 'plain']
+}, {
+    jid: 'peerinfo_login',
+    password: '*******',
+    resource: Math.random().toString(36).substring(7),
+    transport: 'websocket',
+    server: 'your.domain.com',
+    timeout: 2,
+    wsURL: 'ws://your.domain.com:7070/ws/',
+    sasl: ['digest-md5', 'plain']
 }):void;
 ```
 
