@@ -1,28 +1,92 @@
 {
-  "name": "rmx.xmpp.utils",
-  "version": "1.1.2",
+  "_args": [
+    [
+      {
+        "raw": "https://github.com/RESTOMAX/rmx.xmpp.utils.git",
+        "scope": null,
+        "escapedName": null,
+        "name": null,
+        "rawSpec": "https://github.com/RESTOMAX/rmx.xmpp.utils.git",
+        "spec": "git+https://github.com/RESTOMAX/rmx.xmpp.utils.git",
+        "type": "hosted",
+        "hosted": {
+          "type": "github",
+          "ssh": "git@github.com:RESTOMAX/rmx.xmpp.utils.git",
+          "sshUrl": "git+ssh://git@github.com/RESTOMAX/rmx.xmpp.utils.git",
+          "httpsUrl": "git+https://github.com/RESTOMAX/rmx.xmpp.utils.git",
+          "gitUrl": "git://github.com/RESTOMAX/rmx.xmpp.utils.git",
+          "shortcut": "github:RESTOMAX/rmx.xmpp.utils",
+          "directUrl": "https://raw.githubusercontent.com/RESTOMAX/rmx.xmpp.utils/master/package.json"
+        }
+      },
+      "D:\\Projets\\Cordova\\RestomaxViewer3"
+    ]
+  ],
+  "_from": "git+https://github.com/RESTOMAX/rmx.xmpp.utils.git",
+  "_id": "rmx.xmpp.utils@1.1.2",
+  "_inCache": true,
+  "_location": "/rmx.xmpp.utils",
+  "_phantomChildren": {
+    "symbol-observable": "1.0.4"
+  },
+  "_requested": {
+    "raw": "https://github.com/RESTOMAX/rmx.xmpp.utils.git",
+    "scope": null,
+    "escapedName": null,
+    "name": null,
+    "rawSpec": "https://github.com/RESTOMAX/rmx.xmpp.utils.git",
+    "spec": "git+https://github.com/RESTOMAX/rmx.xmpp.utils.git",
+    "type": "hosted",
+    "hosted": {
+      "type": "github",
+      "ssh": "git@github.com:RESTOMAX/rmx.xmpp.utils.git",
+      "sshUrl": "git+ssh://git@github.com/RESTOMAX/rmx.xmpp.utils.git",
+      "httpsUrl": "git+https://github.com/RESTOMAX/rmx.xmpp.utils.git",
+      "gitUrl": "git://github.com/RESTOMAX/rmx.xmpp.utils.git",
+      "shortcut": "github:RESTOMAX/rmx.xmpp.utils",
+      "directUrl": "https://raw.githubusercontent.com/RESTOMAX/rmx.xmpp.utils/master/package.json"
+    }
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "git+https://github.com/RESTOMAX/rmx.xmpp.utils.git#f6fd8c3894d145e0e83f6cadb746b9e909c899a3",
+  "_shasum": "6a297ffb9695edb8b61c911fb1088017a4c94b54",
+  "_shrinkwrap": null,
+  "_spec": "https://github.com/RESTOMAX/rmx.xmpp.utils.git",
+  "_where": "D:\\Projets\\Cordova\\RestomaxViewer3",
+  "author": {
+    "name": "cdecu"
+  },
+  "bugs": {
+    "url": "https://github.com/RESTOMAX/rmx.xmpp.utils/issues"
+  },
+  "dependencies": {
+    "rxjs": "^5.2.0",
+    "stanza.io": "^8.2.0"
+  },
   "description": "rmx xmpp messages",
-  "main": "dist/index.js",
-  "types": "index.d.ts",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/RESTOMAX/rmx.xmpp.utils.git"
-  },
+  "devDependencies": {},
+  "gitHead": "f6fd8c3894d145e0e83f6cadb746b9e909c899a3",
+  "homepage": "https://github.com/RESTOMAX/rmx.xmpp.utils#readme",
   "keywords": [
     "xmpp",
     "websocket"
   ],
-  "author": "cdecu",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/RESTOMAX/rmx.xmpp.utils/issues"
+  "main": "dist/index.js",
+  "name": "rmx.xmpp.utils",
+  "optionalDependencies": {},
+  "readme": "# rmx.xmpp.websocket\r\nXMPP Websocket Library\r\n\r\n\r\n# Dev Install using npm link\r\n```bash\r\ngit clone https://github.com/RESTOMAX/rmx.xmpp.utils.git\r\ncd rmx.xmpp.utils\r\nnpm link\r\ncd AnyProjectUsing rmx.xmpp.utils\r\nnpm link rmx.xmpp.websocket --save\r\n```\r\n\r\n\r\n# Install\r\nNormal install from github\r\n```bash\r\nnpm install --save https://github.com/RESTOMAX/rmx.xmpp.utils.git\r\n```\r\n\r\n\r\n# How to use\r\nEvents Subscribes\r\n  \r\n  1. connectionStatus:\r\n      \r\n```bash\r\nxmpp.connectionStatus.subscribe(\r\n  (x:number) => {\r\n      this.xmppCurrentState = x;\r\n  },\r\n  (e:string) => {\r\n      console.error(e);\r\n  }\r\n);\r\n```\r\n\r\nConnection states:\r\n -9: Error,\r\n -1: AuthError,\r\n 0: Disconnected,\r\n 1: Connected,\r\n 2: Session Started,\r\n 3: Wait Mediator,\r\n 4: Mediator OK,\r\n  \r\n  \r\nPublic methods\r\n  \r\n  1. Initialize xmpp connection\r\n  \r\n```bash\r\n// xmpp.Init(xmppParam, peerinfoXmppParam)\r\n\r\nxmpp.Init({\r\n    jid: 'yourLogin',\r\n    password: '*******',\r\n    resource: Math.random().toString(36).substring(7),\r\n    transport: 'websocket',\r\n    server: 'your.domain.com',\r\n    timeout: 2,\r\n    wsURL: 'ws://your.domain.com:7070/ws/',\r\n    sasl: ['digest-md5', 'plain']\r\n}, {\r\n    jid: 'peerinfo_login',\r\n    password: '*******',\r\n    resource: Math.random().toString(36).substring(7),\r\n    transport: 'websocket',\r\n    server: 'your.domain.com',\r\n    timeout: 2,\r\n    wsURL: 'ws://your.domain.com:7070/ws/',\r\n    sasl: ['digest-md5', 'plain']\r\n}):void;\r\n```\r\n\r\n  2. Send an helo to a receiver:\r\n\r\n```bash\r\nxmpp.Helo(Destination:String):void;\r\n```\r\n\r\n  3. Send an helo to Mediator to see and select an online mediator\r\n  \r\n```bash\r\nxmpp.helo2Mediator():void;\r\n```\r\n\r\n  4. Send a message to a receiver\r\n\r\n```bash\r\nxmpp.sendMsg(Destination:String, Command:String, Data:String):void;\r\n```\r\n\r\n  4. Send a message to Mediator\r\n \r\n```bash\r\nxmpp.sendMsg2Mediator(Command:String, Data:String):void;\r\n```\r\n\r\n",
+  "readmeFilename": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RESTOMAX/rmx.xmpp.utils.git"
   },
-  "homepage": "https://github.com/RESTOMAX/rmx.xmpp.utils#readme",
-  "dependencies": {
-    "rxjs": "^5.2.0",
-    "stanza.io": "^8.2.0"
-  }
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "types": "index.d.ts",
+  "version": "1.1.3"
 }

@@ -134,13 +134,13 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessageIn> {
       //console.log(s);
       const msg = new rmxMsg.XmppRmxMessageIn(s);
       console.log('XmppWebsocket:message: ' + JSON.stringify(msg));
-      if (msg.cmd === 'MEDIATOR_OK' || (msg.cmd === 'PEERERROR' && msg.params['E'] === '2001')) {
-        this.xmppMediator = msg.from;
+      if(msg.cmd === 'MEDIATOR_OK' || (msg.cmd === 'PEERERROR' && msg.params['E'] === '2001')) {
+        this.xmppMediator = message.from;
         this.SetXmppStatus(4);
         return;
       }
       else if(msg.cmd === 'ANSWER' && this.jabberLoginCreating) {
-        this.xmppMediator = msg.from;
+        this.xmppMediator = message.from;
         this.SetXmppStatus(5);
         return;
       }

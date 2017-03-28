@@ -116,35 +116,30 @@ var rmxMsg;
     var XmppRmxMessageOut = (function () {
         function XmppRmxMessageOut() {
         }
-        XmppRmxMessageOut.addParam = function (key, val) {
-            if (!val || val.length <= 0) {
-                return '';
-            }
-            return '<' + key + ':' + val + '>';
+        XmppRmxMessageOut.prototype.addParam = function (key, val) {
+            if (!val || val.length <= 0)
+                return;
+            this.body += '<' + key + ':' + val + '>';
         };
-        XmppRmxMessageOut.addDateParam = function (key, val) {
-            if (!val || val.getFullYear() <= 0) {
-                return '';
-            }
+        XmppRmxMessageOut.prototype.addDateParam = function (key, val) {
+            if (!val || val.getFullYear() <= 0)
+                return;
             var d = xmpp_rmx_utils_1.rmxUtils.dte2YYYYMMDD(val);
-            if (!d || d <= 0) {
-                return '';
-            }
-            return '<' + key + ':' + d.toString() + '>';
+            if (!d || d <= 0)
+                return;
+            this.body += '<' + key + ':' + d.toString() + '>';
         };
-        XmppRmxMessageOut.addPeriodeParam = function (key1, val1, key2, val2) {
-            if (!val1 || val1.getFullYear() <= 0) {
-                return '';
-            }
+        XmppRmxMessageOut.prototype.addPeriodeParam = function (key1, val1, key2, val2) {
+            if (!val1 || val1.getFullYear() <= 0)
+                return;
             var d1 = xmpp_rmx_utils_1.rmxUtils.dte2YYYYMMDD(val1);
             var d2 = xmpp_rmx_utils_1.rmxUtils.dte2YYYYMMDD(val2);
-            if (!d1 || d1 <= 0) {
-                return '';
-            }
+            if (!d1 || d1 <= 0)
+                return;
             if (!d2 || d2 <= d1) {
-                return '<' + key1 + ':' + d1.toString() + '>';
+                this.body += '<' + key1 + ':' + d1.toString() + '>';
             }
-            return '<' + key1 + ':' + d1.toString() + '><' + key2 + ':' + d2.toString() + '>';
+            this.body += '<' + key1 + ':' + d1.toString() + '><' + key2 + ':' + d2.toString() + '>';
         };
         XmppRmxMessageOut.prototype.buildCmd = function (desti, cmd, My) {
             // send cmd to desti
@@ -160,12 +155,12 @@ var rmxMsg;
             this.body += '<MEDIATOR_HELO>';
             this.body += '<' + My + '>';
         };
-        XmppRmxMessageOut.prototype.buildLoginCreator = function (Mediator, My, Login) {
+        XmppRmxMessageOut.prototype.buildLoginCreator = function (Mediator, My, Sender) {
             // send helo to ALL mediator
-            this.to = (Mediator ? Mediator : 'mediator@vpn.restomax.com');
+            this.to = (Mediator && Mediator.full ? Mediator.full : 'mediator@vpn.restomax.com');
             this.body = '<' + (Mediator ? Mediator : 'mediator') + '>';
             this.body += '<CJL>';
-            this.body += '<' + Login + '>';
+            this.body += '<' + Sender + '>';
             this.body += '<p:' + My + '>';
         };
         XmppRmxMessageOut.prototype.buildMediatorCmd = function (Mediator, Cmd, My) {

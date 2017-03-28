@@ -132,12 +132,12 @@ var XmppWebsocket = (function (_super) {
             var msg = new xmpp_rmx_message_1.rmxMsg.XmppRmxMessageIn(s);
             console.log('XmppWebsocket:message: ' + JSON.stringify(msg));
             if (msg.cmd === 'MEDIATOR_OK' || (msg.cmd === 'PEERERROR' && msg.params['E'] === '2001')) {
-                _this.xmppMediator = msg.from;
+                _this.xmppMediator = message.from;
                 _this.SetXmppStatus(4);
                 return;
             }
             else if (msg.cmd === 'ANSWER' && _this.jabberLoginCreating) {
-                _this.xmppMediator = msg.from;
+                _this.xmppMediator = message.from;
                 _this.SetXmppStatus(5);
                 return;
             }

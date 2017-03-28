@@ -133,37 +133,27 @@ export namespace rmxMsg {
     public to: string;
     public body: string;
     
-    public static addParam(key: string, val: string): string {
-      if (!val || val.length <= 0) {
-        return '';
-      }
-      return '<' + key + ':' + val + '>';
+    public addParam(key: string, val: string): string {
+      if (!val || val.length <= 0) return;
+      this.body += '<' + key + ':' + val + '>';
     }
     
-    public static addDateParam(key: string, val:  Date ): string {
-      if (!val || val.getFullYear() <= 0) {
-        return '';
-      }
+    public addDateParam(key: string, val:  Date ): string {
+      if (!val || val.getFullYear() <= 0) return;
       const d = rmxUtils.dte2YYYYMMDD(val);
-      if (!d || d <= 0) {
-        return '';
-      }
-      return '<' + key + ':' + d.toString() + '>';
+      if (!d || d <= 0) return;
+      this.body += '<' + key + ':' + d.toString() + '>';
     }
     
-    public static addPeriodeParam(key1: string, val1:  Date, key2: string, val2:  Date): string {
-      if (!val1 || val1.getFullYear() <= 0) {
-        return '';
-      }
+    public addPeriodeParam(key1: string, val1:  Date, key2: string, val2:  Date): string {
+      if (!val1 || val1.getFullYear() <= 0) return
       const d1 = rmxUtils.dte2YYYYMMDD(val1);
       const d2 = rmxUtils.dte2YYYYMMDD(val2);
-      if (!d1 || d1 <= 0) {
-        return '';
-      }
+      if (!d1 || d1 <= 0) return;
       if (!d2 || d2 <= d1) {
-        return '<' + key1 + ':' + d1.toString() + '>';
+        this.body += '<' + key1 + ':' + d1.toString() + '>';
       }
-      return '<' + key1 + ':' + d1.toString() + '><' + key2 + ':' + d2.toString() + '>';
+      this.body += '<' + key1 + ':' + d1.toString() + '><' + key2 + ':' + d2.toString() + '>';
     }
     
     public buildCmd(desti: string, cmd: string, My: string): void {
@@ -186,14 +176,14 @@ export namespace rmxMsg {
       this.body += '<' + My + '>';
     }
 
-    public buildLoginCreator(Mediator: any, My: string, Login: string): void {
+    public buildLoginCreator(Mediator: any, My: string, Sender: string): void {
       
       // send helo to ALL mediator
-      this.to = (Mediator ? Mediator : 'mediator@vpn.restomax.com');
+      this.to = (Mediator && Mediator.full ? Mediator.full : 'mediator@vpn.restomax.com');
       
       this.body = '<' + (Mediator ? Mediator : 'mediator') + '>';
       this.body += '<CJL>';
-      this.body += '<' + Login + '>';
+      this.body += '<' + Sender + '>';
       this.body += '<p:' + My + '>';
     }
     
