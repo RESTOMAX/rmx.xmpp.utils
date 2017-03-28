@@ -2,7 +2,7 @@
   "name": "rmx.xmpp.utils",
   "version": "1.1.2",
   "description": "rmx xmpp messages",
-  "main": "index.js",
+  "main": "dist/index.js",
   "types": "index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
