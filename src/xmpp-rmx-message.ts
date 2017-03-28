@@ -181,7 +181,7 @@ export namespace rmxMsg {
       // send helo to ALL mediator
       this.to = (Mediator && Mediator.full ? Mediator.full : 'mediator@vpn.restomax.com');
       
-      this.body = '<' + (Mediator ? Mediator : 'mediator') + '>';
+      this.body = '<' + (Mediator && Mediator.full ? Mediator.full : 'mediator') + '>';
       this.body += '<CJL>';
       this.body += '<' + Sender + '>';
       this.body += '<p:' + My + '>';
@@ -192,7 +192,7 @@ export namespace rmxMsg {
       // send cmd to MY mediator
       this.to = (Mediator && Mediator.full ? Mediator.full : 'mediator@vpn.restomax.com');
       
-      this.body = '<' + (Mediator && Mediator.bare ? Mediator.bare : 'mediator') + '>';
+      this.body = '<' + (Mediator && Mediator.full ? Mediator.full : 'mediator') + '>';
       this.body += '<' + (Cmd ? Cmd : 'ASK_VIEW') + '>';
       this.body += '<' + My + '>';
     }
