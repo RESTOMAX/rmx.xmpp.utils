@@ -5,7 +5,7 @@ export namespace rmxIntf {
    */
   export interface IxmppRmxConnectParams {
     jid: string;
-    login: string;
+    login?: string;
     password: string;
     resource: string;
     transport: string;

@@ -60,7 +60,7 @@ var XmppWebsocket = (function (_super) {
                 _this.CreateStanzioClient(_this.xmppParam);
             }
             else if ((!_this.reconnectionObservable) && (_this.xmppStatus === 0) && (_this.jabberLoginCreating)) {
-                console.warn('Start To create a new JabberLogin');
+                console.log('Start To create a new JabberLogin');
                 _this.CreateStanzioClient(_this.defaultXmppParam);
             }
             else if ((!_this.reconnectionObservable) && (_this.xmppStatus === -1) && (!_this.jabberLoginCreating)) {
@@ -69,6 +69,7 @@ var XmppWebsocket = (function (_super) {
                 _this.xmppClient.disconnect();
             }
             else if ((!_this.reconnectionObservable) && (_this.xmppStatus === 4) && (_this.jabberLoginCreating)) {
+                console.log('Send request to create Jabber Login');
                 _this.sendLoginCreator();
             }
             else if ((!_this.reconnectionObservable) && (_this.xmppStatus === 4) && (!_this.jabberLoginCreating)) {
@@ -91,26 +92,26 @@ var XmppWebsocket = (function (_super) {
         }
         this.xmppClient = stanzaio.createClient(this.currentXmppParam);
         this.xmppClient.on('connected', function (e, err) {
-            console.info('XmppWebsocket:connected: ' + _this.currentXmppParam.login);
+            console.info('XmppWebsocket:connected: ' + _this.currentXmppParam.jid);
             _this.SetXmppStatus(1);
         });
         this.xmppClient.on('auth:failed', function () {
-            console.error('XmppWebsocket:auth:failed: ' + _this.currentXmppParam.login);
+            console.warn('XmppWebsocket:auth:failed: ' + _this.currentXmppParam.jid);
             _this.SetXmppStatus(-1);
         });
         this.xmppClient.on('auth:success', function () {
-            console.log('XmppWebsocket:auth:success: ' + _this.currentXmppParam.login);
+            console.log('XmppWebsocket:auth:success: ' + _this.currentXmppParam.jid);
             _this.SetXmppStatus(1);
         });
         this.xmppClient.on('session:started', function () {
-            console.info('XmppWebsocket:session:started: ' + _this.currentXmppParam.login);
+            console.info('XmppWebsocket:session:started: ' + _this.currentXmppParam.jid);
             _this.xmppClient.getRoster();
             _this.xmppClient.sendPresence();
             _this.SetXmppStatus(2);
             _this.helo2Mediator();
         });
         this.xmppClient.on('disconnected', function (e, err) {
-            console.log('XmppWebsocket:disconnected: ' + _this.currentXmppParam.login);
+            console.log('XmppWebsocket:disconnected: ' + _this.currentXmppParam.jid);
             if (e)
                 console.warn(e);
             if (err)
@@ -286,7 +287,7 @@ var XmppWebsocket = (function (_super) {
         console.log('XmppWebsocket:sendLoginCreator', this.xmppStatus);
         try {
             var msg = new xmpp_rmx_message_1.rmxMsg.XmppRmxMessageOut();
-            msg.buildLoginCreator(this.xmppMediator, this.xmppParam.login, this.getMyFullName());
+            msg.buildLoginCreator(this.xmppMediator, this.xmppParam.jid, this.getMyFullName());
             this.xmppClient.sendMessage(msg);
         }
         catch (err) {

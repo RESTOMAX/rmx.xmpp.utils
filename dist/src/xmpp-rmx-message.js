@@ -161,7 +161,7 @@ var rmxMsg;
             this.body = '<' + (Mediator && Mediator.full ? Mediator.full : 'mediator') + '>';
             this.body += '<CJL>';
             this.body += '<' + Sender + '>';
-            this.body += '<p:' + My + '>';
+            this.body += '<p:' + My.split('@')[0] + '>';
         };
         XmppRmxMessageOut.prototype.buildMediatorCmd = function (Mediator, Cmd, My) {
             // send cmd to MY mediator

@@ -53,7 +53,7 @@ Public methods
 // xmpp.Init(xmppParam, peerinfoXmppParam)
 
 xmpp.Init({
-    jid: 'yourLogin',
+    jid: 'yourLogin@your.domain.com',
     password: '*******',
     resource: Math.random().toString(36).substring(7),
     transport: 'websocket',
@@ -62,7 +62,7 @@ xmpp.Init({
     wsURL: 'ws://your.domain.com:7070/ws/',
     sasl: ['digest-md5', 'plain']
 }, {
-    jid: 'peerinfo_login',
+    jid: 'peerinfo_login@your.domain.com',
     password: '*******',
     resource: Math.random().toString(36).substring(7),
     transport: 'websocket',
