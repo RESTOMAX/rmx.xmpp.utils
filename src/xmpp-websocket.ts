@@ -45,7 +45,7 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessageIn> {
     super();
     console.log('XmppWebsocket Create');
     /// connection status
-    this.connectionStatus = new Observable((observer) => {
+    this.connectionStatus = new Observable<number>((observer) => {
       this.connectionObserver = observer;
       }).share().distinctUntilChanged();
     }
