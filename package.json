@@ -1,63 +1,6 @@
 {
-  "_args": [
-    [
-      {
-        "raw": "https://github.com/RESTOMAX/rmx.xmpp.utils.git",
-        "scope": null,
-        "escapedName": null,
-        "name": null,
-        "rawSpec": "https://github.com/RESTOMAX/rmx.xmpp.utils.git",
-        "spec": "git+https://github.com/RESTOMAX/rmx.xmpp.utils.git",
-        "type": "hosted",
-        "hosted": {
-          "type": "github",
-          "ssh": "git@github.com:RESTOMAX/rmx.xmpp.utils.git",
-          "sshUrl": "git+ssh://git@github.com/RESTOMAX/rmx.xmpp.utils.git",
-          "httpsUrl": "git+https://github.com/RESTOMAX/rmx.xmpp.utils.git",
-          "gitUrl": "git://github.com/RESTOMAX/rmx.xmpp.utils.git",
-          "shortcut": "github:RESTOMAX/rmx.xmpp.utils",
-          "directUrl": "https://raw.githubusercontent.com/RESTOMAX/rmx.xmpp.utils/master/package.json"
-        }
-      },
-      "D:\\Projets\\Cordova\\RestomaxViewer3"
-    ]
-  ],
-  "_from": "git+https://github.com/RESTOMAX/rmx.xmpp.utils.git",
-  "_id": "rmx.xmpp.utils@1.1.2",
-  "_inCache": true,
-  "_location": "/rmx.xmpp.utils",
-  "_phantomChildren": {
-    "symbol-observable": "1.0.4"
-  },
-  "_requested": {
-    "raw": "https://github.com/RESTOMAX/rmx.xmpp.utils.git",
-    "scope": null,
-    "escapedName": null,
-    "name": null,
-    "rawSpec": "https://github.com/RESTOMAX/rmx.xmpp.utils.git",
-    "spec": "git+https://github.com/RESTOMAX/rmx.xmpp.utils.git",
-    "type": "hosted",
-    "hosted": {
-      "type": "github",
-      "ssh": "git@github.com:RESTOMAX/rmx.xmpp.utils.git",
-      "sshUrl": "git+ssh://git@github.com/RESTOMAX/rmx.xmpp.utils.git",
-      "httpsUrl": "git+https://github.com/RESTOMAX/rmx.xmpp.utils.git",
-      "gitUrl": "git://github.com/RESTOMAX/rmx.xmpp.utils.git",
-      "shortcut": "github:RESTOMAX/rmx.xmpp.utils",
-      "directUrl": "https://raw.githubusercontent.com/RESTOMAX/rmx.xmpp.utils/master/package.json"
-    }
-  },
-  "_requiredBy": [
-    "#USER",
-    "/"
-  ],
-  "_resolved": "git+https://github.com/RESTOMAX/rmx.xmpp.utils.git#f6fd8c3894d145e0e83f6cadb746b9e909c899a3",
-  "_shasum": "6a297ffb9695edb8b61c911fb1088017a4c94b54",
-  "_shrinkwrap": null,
-  "_spec": "https://github.com/RESTOMAX/rmx.xmpp.utils.git",
-  "_where": "D:\\Projets\\Cordova\\RestomaxViewer3",
   "author": {
-    "name": "cdecu"
+    "name": "RESTOMAX"
   },
   "bugs": {
     "url": "https://github.com/RESTOMAX/rmx.xmpp.utils/issues"
