@@ -227,16 +227,21 @@ var XmppWebsocket = (function (_super) {
      * @param cmd
      * @param data
      */
-    XmppWebsocket.prototype.sendMsg = function (desti, cmd, iid, pk, data) {
+    XmppWebsocket.prototype.sendMsg = function (cmd, params, dates) {
         //console.log('XmppWebsocket:sendMsg', this.xmppStatus);
         try {
             var my = this.getMyFullName();
             var msg = new rmxMsg.XmppRmxMessageOut();
             msg.buildCmd(this.xmppMediator.full || my, cmd, my);
+            // list and add request params
+            for (var key in params) {
+                msg.addParam(key, params[key]);
+            }
+            // list and add request dates
+            for (var key in dates) {
+                msg.addDateParam(key, params[key]);
+            }
             msg.body += '<L:1>';
-            msg.body += '<IID:' + iid + '>';
-            msg.body += '<PK:' + pk + '>';
-            msg.body += data;
             this.xmppClient.sendMessage(msg);
         }
         catch (err) {
