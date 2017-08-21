@@ -239,7 +239,7 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessageIn> {
         }
         // list and add request dates
         for(let key in dates) {
-          msg.addDateParam(key, params[key]);
+          msg.addDateParam(key, dates[key]);
         }
         msg.body += '<L:1>';
         this.xmppClient.sendMessage(msg);
