@@ -227,13 +227,15 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessageIn> {
    * @param cmd
    * @param data
    */
-  public sendMsg(desti: string, cmd: string, data: string): void {
+  public sendMsg(desti: string, cmd: string, iid: string, pk: string, data: string): void {
     //console.log('XmppWebsocket:sendMsg', this.xmppStatus);
     try {
         const my = this.getMyFullName();
         const msg = new rmxMsg.XmppRmxMessageOut();
         msg.buildCmd(this.xmppMediator.full || my , cmd, my);
         msg.body += '<L:1>';
+        msg.body += '<IID:'+iid+'>';
+        msg.body += '<PK:'+pk+'>';
         msg.body += data;
         this.xmppClient.sendMessage(msg);
     } catch (err) {
