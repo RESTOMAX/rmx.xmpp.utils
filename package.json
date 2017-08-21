@@ -6,11 +6,13 @@
     "url": "https://github.com/RESTOMAX/rmx.xmpp.utils/issues"
   },
   "dependencies": {
-    "rxjs": "^5.2.0",
-    "stanza.io": "^8.2.0"
+    "rxjs": "^5.4.3",
+    "stanza.io": "^8.4.3"
   },
   "description": "rmx xmpp messages",
-  "devDependencies": {},
+  "devDependencies": {
+    "typescript": "^2.4.2"
+  },
   "gitHead": "f6fd8c3894d145e0e83f6cadb746b9e909c899a3",
   "homepage": "https://github.com/RESTOMAX/rmx.xmpp.utils#readme",
   "keywords": [
@@ -28,8 +30,9 @@
     "url": "git+https://github.com/RESTOMAX/rmx.xmpp.utils.git"
   },
   "scripts": {
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "types": "index.d.ts",
-  "version": "1.1.4"
+  "version": "1.2.5"
 }
