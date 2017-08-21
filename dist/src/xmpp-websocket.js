@@ -239,7 +239,7 @@ var XmppWebsocket = (function (_super) {
             }
             // list and add request dates
             for (var key in dates) {
-                msg.addDateParam(key, params[key]);
+                msg.addDateParam(key, dates[key]);
             }
             msg.body += '<L:1>';
             this.xmppClient.sendMessage(msg);
