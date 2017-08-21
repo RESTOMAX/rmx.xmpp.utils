@@ -227,16 +227,21 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessageIn> {
    * @param cmd
    * @param data
    */
-  public sendMsg(desti: string, cmd: string, iid: string, pk: string, data: string): void {
+  public sendMsg(cmd:string, params:Object, dates:Object): void {
     //console.log('XmppWebsocket:sendMsg', this.xmppStatus);
     try {
         const my = this.getMyFullName();
         const msg = new rmxMsg.XmppRmxMessageOut();
         msg.buildCmd(this.xmppMediator.full || my , cmd, my);
+        // list and add request params
+        for(let key in params) {
+          msg.addParam(key, params[key]);
+        }
+        // list and add request dates
+        for(let key in dates) {
+          msg.addDateParam(key, params[key]);
+        }
         msg.body += '<L:1>';
-        msg.body += '<IID:'+iid+'>';
-        msg.body += '<PK:'+pk+'>';
-        msg.body += data;
         this.xmppClient.sendMessage(msg);
     } catch (err) {
         /// in case of an error with a loss of connection, we restore it
