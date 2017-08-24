@@ -24,7 +24,24 @@ export namespace rmxIntf {
     cmd: string;
     to: string;
     data: string;
+    params: IxmppRmxMessageParams;
+    rawparams?: any;
     parse(rawMessage: string): boolean;
+  }
+
+  export interface IxmppRmxMessageParams {
+    Param?: string;
+    MSG: string;
+    IID: string;
+    Staff: string;
+    PK: string;
+    L: string;
+    Fmt: string;
+    D1: string;
+    D2: string;
+    CMAXNum: string;
+    UserAgent: string;
+    Ver: string;
   }
 
   // ..................................................................................................................

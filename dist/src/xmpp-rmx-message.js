@@ -14,7 +14,6 @@ export var rmxMsg;
          * @param rawMessage
          */
         function XmppRmxMessageIn(rawMessage) {
-            this.params = {};
             this.rawparams = {};
             this.parse(rawMessage);
         }
@@ -28,7 +27,7 @@ export var rmxMsg;
             this.from = null;
             this.cmd = null;
             this.to = null;
-            this.params = {};
+            this.params = null;
             this.rawparams = {};
             this.dataFmt = null;
             this.data = null;

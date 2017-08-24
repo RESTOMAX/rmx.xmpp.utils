@@ -20,7 +20,7 @@ export namespace rmxMsg {
     public isValid: boolean;
     public dataFmt: string;
     public data: string;
-    public params    = {};
+    public params:rmxIntf.IxmppRmxMessageParams;
     public rawparams = {};
     
     /// ..................................................................................................................
@@ -43,7 +43,7 @@ export namespace rmxMsg {
       this.from      = null;
       this.cmd       = null;
       this.to        = null;
-      this.params    = {};
+      this.params    = null;
       this.rawparams = {};
       this.dataFmt   = null;
       this.data      = null;
