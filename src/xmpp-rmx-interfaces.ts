@@ -24,7 +24,7 @@ export namespace rmxIntf {
     cmd: string;
     to: string;
     data: string;
-    params: IxmppRmxMessageParams;
+    params: any;
     rawparams?: any;
     parse(rawMessage: string): boolean;
   }
@@ -36,6 +36,8 @@ export namespace rmxIntf {
     Staff: string;
     PK: string;
     L: string;
+    E: string;
+    M: string;
     Fmt: string;
     D1: string;
     D2: string;

@@ -20,8 +20,8 @@ export namespace rmxMsg {
     public isValid: boolean;
     public dataFmt: string;
     public data: string;
-    public params:rmxIntf.IxmppRmxMessageParams;
-    public rawparams = {};
+    public params:any = {};
+    public rawparams:any = {};
     
     /// ..................................................................................................................
     /**
@@ -43,7 +43,7 @@ export namespace rmxMsg {
       this.from      = null;
       this.cmd       = null;
       this.to        = null;
-      this.params    = null;
+      this.params    = {};
       this.rawparams = {};
       this.dataFmt   = null;
       this.data      = null;
