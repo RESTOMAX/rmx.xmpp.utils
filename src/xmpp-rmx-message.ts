@@ -19,7 +19,7 @@ export namespace rmxMsg {
     public to: string;
     public isValid: boolean;
     public dataFmt: string;
-    public dataJson: Object;
+    public dataJson: any;
     public data: string;
     public params:any = {};
     public rawparams:any = {};

@@ -25,7 +25,7 @@ export namespace rmxIntf {
     to: string;
     data: string;
     dataFmt: String;
-    dataJson: Object;
+    dataJson: any;
     params: any;
     rawparams?: any;
     parse(rawMessage: string): boolean;
