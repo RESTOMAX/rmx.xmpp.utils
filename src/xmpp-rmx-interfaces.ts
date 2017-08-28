@@ -24,6 +24,8 @@ export namespace rmxIntf {
     cmd: string;
     to: string;
     data: string;
+    dataFmt: String;
+    dataJson: Object;
     params: any;
     rawparams?: any;
     parse(rawMessage: string): boolean;

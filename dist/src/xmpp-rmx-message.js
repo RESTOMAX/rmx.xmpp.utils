@@ -31,6 +31,7 @@ export var rmxMsg;
             this.params = {};
             this.rawparams = {};
             this.dataFmt = null;
+            this.dataJson = null;
             this.data = null;
             this.isValid = false;
             if (!rawMessage || 0 === rawMessage.length) {
@@ -96,6 +97,8 @@ export var rmxMsg;
             }
             this.data = MsgData || 'Error';
             this.dataFmt = MsgDataFmt || 'TXT';
+            this.dataJson = this.dataFmt === 'JSON' && this.data !== 'Error' ? JSON.parse(this.data) : null;
+            this.data = this.dataFmt !== 'JSON' || this.data === 'Error' ? this.data : null;
             this.isValid = true;
             return this.isValid;
         };

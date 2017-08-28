@@ -19,6 +19,7 @@ export namespace rmxMsg {
     public to: string;
     public isValid: boolean;
     public dataFmt: string;
+    public dataJson: Object;
     public data: string;
     public params:any = {};
     public rawparams:any = {};
@@ -46,6 +47,7 @@ export namespace rmxMsg {
       this.params    = {};
       this.rawparams = {};
       this.dataFmt   = null;
+      this.dataJson  = null;
       this.data      = null;
       
       this.isValid   = false;
@@ -115,9 +117,11 @@ export namespace rmxMsg {
         return false;
       }
     
-      this.data    = MsgData || 'Error';
-      this.dataFmt = MsgDataFmt || 'TXT';
-      this.isValid = true;
+      this.data     = MsgData || 'Error';
+      this.dataFmt  = MsgDataFmt || 'TXT';
+      this.dataJson = this.dataFmt==='JSON' && this.data!=='Error' ? JSON.parse(this.data) : null;
+      this.data     = this.dataFmt!=='JSON' || this.data==='Error' ? this.data : null;
+      this.isValid  = true;
       return this.isValid;
     };
   }
