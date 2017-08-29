@@ -25,7 +25,7 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessageIn> {
     ,  '5':   'Jabber Login as created'
     };
 
-  private xmppStatus = 0;
+  public xmppStatus = 0;
   private xmppClient: any = null;
   private xmppMediator: any = null;
   private jabberLoginCreating: boolean = false;
