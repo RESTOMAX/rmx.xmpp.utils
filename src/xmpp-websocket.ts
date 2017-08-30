@@ -6,7 +6,6 @@ import 'rxjs/add/observable/interval';
 import 'rxjs/add/operator/takeWhile';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/share';
-import { rmxUtils } from './xmpp-rmx-utils';
 import { rmxMsg } from './xmpp-rmx-message';
 import { rmxIntf } from './xmpp-rmx-interfaces';
 
