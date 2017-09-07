@@ -71,17 +71,19 @@ var XmppWebsocket = (function (_super) {
             else if ((!_this.reconnectionObservable) && (_this.xmppStatus === 4) && (_this.jabberLoginCreating)) {
                 //console.log('Send request to create Jabber Login');
                 _this.sendLoginCreator();
+                _this.timerConnect.cancel();
             }
             else if ((!_this.reconnectionObservable) && (_this.xmppStatus === 4) && (!_this.jabberLoginCreating)) {
                 console.info('Conneced and XMPP session is opened');
                 _this.hasBeenLogged = true;
+                _this.timerConnect.cancel();
             }
             else if ((!_this.reconnectionObservable) && (_this.xmppStatus === 5)) {
                 console.info('JabberLogin Created');
                 _this.jabberLoginCreating = false;
                 _this.xmppClient.disconnect();
             }
-            if ((!_this.reconnectionObservable) && (_this.xmppStatus === -9) && (!_this.jabberLoginCreating)) {
+            else if ((!_this.reconnectionObservable) && (_this.xmppStatus === -9) && (!_this.jabberLoginCreating)) {
                 _this.hasBeenLogged = false;
                 _this.reconnect();
             }
@@ -174,6 +176,7 @@ var XmppWebsocket = (function (_super) {
     XmppWebsocket.prototype.connect = function () {
         //console.log('XmppWebsocket:connect');
         try {
+            this.timerConnect = setTimeout(this.checkStatus, 9000);
             this.xmppClient.connect();
         }
         catch (err) {
@@ -183,6 +186,11 @@ var XmppWebsocket = (function (_super) {
         }
     };
     ;
+    XmppWebsocket.prototype.checkStatus = function () {
+        if (this.xmppStatus !== 4) {
+            this.connect();
+        }
+    };
     XmppWebsocket.prototype.reconnect = function () {
         var _this = this;
         //console.log('XmppWebsocket:reconnect subscribe', this.xmppStatus);

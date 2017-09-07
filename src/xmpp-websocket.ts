@@ -40,6 +40,7 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessageIn> {
   private currentXmppParam: rmxIntf.IxmppRmxConnectParams;
   private queueManager: rmxIntf.IxmppQueueManager;
   private hasBeenLogged: boolean = false;
+  private timerConnect: any;
 
   /// ..................................................................................................................
   constructor() {
@@ -85,17 +86,19 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessageIn> {
       else if ((!this.reconnectionObservable) && (this.xmppStatus === 4) && (this.jabberLoginCreating)) {
         //console.log('Send request to create Jabber Login');
         this.sendLoginCreator();
+        this.timerConnect.cancel();
       } 
       else if ((!this.reconnectionObservable) && (this.xmppStatus === 4) && (!this.jabberLoginCreating)) {
         console.info('Conneced and XMPP session is opened');
         this.hasBeenLogged = true;
+        this.timerConnect.cancel();
       } 
       else if ((!this.reconnectionObservable) && (this.xmppStatus === 5)) {
         console.info('JabberLogin Created');
         this.jabberLoginCreating = false;
         this.xmppClient.disconnect();
       }
-      if ((!this.reconnectionObservable) && (this.xmppStatus === -9) && (!this.jabberLoginCreating)) {
+      else if ((!this.reconnectionObservable) && (this.xmppStatus === -9) && (!this.jabberLoginCreating)) {
         this.hasBeenLogged = false;
         this.reconnect();
       }
@@ -187,6 +190,7 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessageIn> {
   private connect(): void {
     //console.log('XmppWebsocket:connect');
     try {
+      this.timerConnect = setTimeout(this.checkStatus, 9000);
       this.xmppClient.connect();
     } catch (err) {
       /// in case of an error with a loss of connection, we restore it
@@ -194,6 +198,11 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessageIn> {
       this.SetXmppStatus(-9);
     }
   };
+  private checkStatus():void {
+    if(this.xmppStatus !== 4) {
+      this.connect();
+    }
+  }
   private reconnect(): void {
     //console.log('XmppWebsocket:reconnect subscribe', this.xmppStatus);
     this.reconnectionObservable = Observable.interval(this.reconnectInterval)
