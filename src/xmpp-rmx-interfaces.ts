@@ -72,7 +72,7 @@ export namespace rmxIntf {
     RPCCallID: Array<IxmppCall>;
     set(xmppCall: IxmppCall): number;
     get(index: number): IxmppCall;
-    cancel(n: number): void;
+    remove(n: number): void;
     clear(): void;
   }
 

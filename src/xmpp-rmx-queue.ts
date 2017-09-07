@@ -19,7 +19,7 @@ export class QueueManager implements rmxIntf.IxmppQueueManager {
         return this.RPCCallID[index];
     };
 
-    cancel(index: number): void {
+    remove(index: number): void {
         if(!this.RPCCallID[index]) return;
         this.RPCCallID.splice(index,1);
     }

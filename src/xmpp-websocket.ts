@@ -231,6 +231,10 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessageIn> {
   public getQueueInf(index:number): any {
     return this.queueManager.get(index);
   }
+
+  public removeQueueItem(index:number): void {
+    this.queueManager.remove(index);
+  }
   /// ..................................................................................................................
   /**
    * send Helo to desti

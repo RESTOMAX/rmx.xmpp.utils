@@ -217,6 +217,9 @@ var XmppWebsocket = (function (_super) {
     XmppWebsocket.prototype.getQueueInf = function (index) {
         return this.queueManager.get(index);
     };
+    XmppWebsocket.prototype.removeQueueItem = function (index) {
+        this.queueManager.remove(index);
+    };
     /// ..................................................................................................................
     /**
      * send Helo to desti

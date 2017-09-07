@@ -19,7 +19,7 @@ var QueueManager = (function () {
         return this.RPCCallID[index];
     };
     ;
-    QueueManager.prototype.cancel = function (index) {
+    QueueManager.prototype.remove = function (index) {
         if (!this.RPCCallID[index])
             return;
         this.RPCCallID.splice(index, 1);
