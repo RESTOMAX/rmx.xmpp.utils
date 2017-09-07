@@ -15,9 +15,7 @@ var QueueManager = (function () {
     QueueManager.prototype.get = function (index) {
         if (!this.RPCCallID[index])
             return null;
-        var result = JSON.parse(JSON.stringify(this.RPCCallID[index]));
-        this.RPCCallID.splice(index, 1);
-        return result;
+        return this.RPCCallID[index];
     };
     ;
     QueueManager.prototype.cancel = function (index) {

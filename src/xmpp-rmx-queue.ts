@@ -16,9 +16,7 @@ export class QueueManager implements rmxIntf.IxmppQueueManager {
 
     get(index: number): rmxIntf.IxmppCall {
         if(!this.RPCCallID[index]) return null;
-        let result: rmxIntf.IxmppCall = JSON.parse(JSON.stringify(this.RPCCallID[index]));
-        this.RPCCallID.splice(index,1);
-        return result;
+        return this.RPCCallID[index];
     };
 
     cancel(index: number): void {
