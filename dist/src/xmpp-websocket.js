@@ -36,6 +36,7 @@ var XmppWebsocket = (function (_super) {
         _this.connectionStatus = new Observable(function (observer) {
             _this.connectionObserver = observer;
         }).share().distinctUntilChanged();
+        _this.queueManager = new QueueManager();
         return _this;
     }
     /// ..................................................................................................................
@@ -48,7 +49,6 @@ var XmppWebsocket = (function (_super) {
         this.defaultXmppParam = defaultXmppParam;
         this.xmppParam = xmppParam;
         this.currentXmppParam = xmppParam;
-        this.queueManager = new QueueManager();
         /// create stanza.io xmppClient and map event to myself
         /// we follow the connection status and run the reconnect while losing the connection
         this.CreateStanzioClient(this.currentXmppParam);
@@ -210,6 +210,13 @@ var XmppWebsocket = (function (_super) {
         });
     };
     ;
+    /// ..................................................................................................................
+    /**
+     * get queue element infos
+     */
+    XmppWebsocket.prototype.getQueueInf = function (index) {
+        return this.queueManager.get(index);
+    };
     /// ..................................................................................................................
     /**
      * send Helo to desti

@@ -4,7 +4,7 @@ import { rmxIntf } from './xmpp-rmx-interfaces';
 ///   ..................................................................................................................
 ///   ..................................................................................................................
 /**
- * XmppRmxMessage
+ * QueueManager
  */
 export class QueueManager implements rmxIntf.IxmppQueueManager {
     RPCCallID: Array<rmxIntf.IxmppCall>;

@@ -49,6 +49,7 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessageIn> {
     this.connectionStatus = new Observable<number>((observer) => {
       this.connectionObserver = observer;
     }).share().distinctUntilChanged();
+    this.queueManager = new QueueManager();
   }
   /// ..................................................................................................................
   /**
@@ -59,7 +60,7 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessageIn> {
     this.defaultXmppParam = defaultXmppParam;
     this.xmppParam = xmppParam;
     this.currentXmppParam = xmppParam;
-    this.queueManager = new QueueManager();
+    
 
     /// create stanza.io xmppClient and map event to myself
     /// we follow the connection status and run the reconnect while losing the connection
@@ -222,6 +223,14 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessageIn> {
       }
     );
   };
+
+  /// ..................................................................................................................
+  /**
+   * get queue element infos
+   */
+  public getQueueInf(index:number): any {
+    return this.queueManager.get(index);
+  }
   /// ..................................................................................................................
   /**
    * send Helo to desti
