@@ -87,11 +87,13 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessageIn> {
         //console.log('Send request to create Jabber Login');
         this.sendLoginCreator();
         this.timerConnect.cancel();
+        this.timerConnect = null;
       } 
       else if ((!this.reconnectionObservable) && (this.xmppStatus === 4) && (!this.jabberLoginCreating)) {
         console.info('Conneced and XMPP session is opened');
         this.hasBeenLogged = true;
         this.timerConnect.cancel();
+        this.timerConnect = null;
       } 
       else if ((!this.reconnectionObservable) && (this.xmppStatus === 5)) {
         console.info('JabberLogin Created');

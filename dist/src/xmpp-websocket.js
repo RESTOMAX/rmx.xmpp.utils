@@ -72,11 +72,13 @@ var XmppWebsocket = (function (_super) {
                 //console.log('Send request to create Jabber Login');
                 _this.sendLoginCreator();
                 _this.timerConnect.cancel();
+                _this.timerConnect = null;
             }
             else if ((!_this.reconnectionObservable) && (_this.xmppStatus === 4) && (!_this.jabberLoginCreating)) {
                 console.info('Conneced and XMPP session is opened');
                 _this.hasBeenLogged = true;
                 _this.timerConnect.cancel();
+                _this.timerConnect = null;
             }
             else if ((!_this.reconnectionObservable) && (_this.xmppStatus === 5)) {
                 console.info('JabberLogin Created');
