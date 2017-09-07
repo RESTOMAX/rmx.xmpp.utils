@@ -44,7 +44,7 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessageIn> {
   /// ..................................................................................................................
   constructor() {
     super();
-    console.log('XmppWebsocket Create');
+    //console.log('XmppWebsocket Create');
     /// connection status
     this.connectionStatus = new Observable<number>((observer) => {
       this.connectionObserver = observer;
@@ -74,7 +74,7 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessageIn> {
         this.CreateStanzioClient(this.xmppParam);
       } 
       else if ((!this.reconnectionObservable) && (this.xmppStatus === 0) && (this.jabberLoginCreating)) {
-        console.log('Start To create a new JabberLogin');
+        //console.log('Start To create a new JabberLogin');
         this.CreateStanzioClient(this.defaultXmppParam);
       } 
       else if ((!this.reconnectionObservable) && (this.xmppStatus === -1) && (!this.jabberLoginCreating)) {
@@ -83,7 +83,7 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessageIn> {
         this.xmppClient.disconnect();
       } 
       else if ((!this.reconnectionObservable) && (this.xmppStatus === 4) && (this.jabberLoginCreating)) {
-        console.log('Send request to create Jabber Login');
+        //console.log('Send request to create Jabber Login');
         this.sendLoginCreator();
       } 
       else if ((!this.reconnectionObservable) && (this.xmppStatus === 4) && (!this.jabberLoginCreating)) {
@@ -119,7 +119,7 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessageIn> {
       this.SetXmppStatus(-1);
     });
     this.xmppClient.on('auth:success', () => {
-      console.log('XmppWebsocket:auth:success: ' + this.currentXmppParam.jid);
+      //console.log('XmppWebsocket:auth:success: ' + this.currentXmppParam.jid);
       this.SetXmppStatus(1);
     });
     this.xmppClient.on('session:started', () => {
@@ -130,7 +130,7 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessageIn> {
       this.helo2Mediator();
     });
     this.xmppClient.on('disconnected', (e, err) => {
-      console.log('XmppWebsocket:disconnected: ' + this.currentXmppParam.jid);
+      //console.log('XmppWebsocket:disconnected: ' + this.currentXmppParam.jid);
       if (e) console.warn(e);
       if (err) console.error(err);
       this.SetXmppStatus(0);
@@ -148,7 +148,7 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessageIn> {
       const s: string = message.body;
       //console.log(s);
       let msg = new rmxMsg.XmppRmxMessageIn(s);
-      console.log('XmppWebsocket:message: ' + JSON.stringify(msg));
+      //console.log('XmppWebsocket:message: ' + JSON.stringify(msg));
       if (msg.cmd === 'MEDIATOR_OK' || (msg.cmd === 'PEERERROR' && msg.params['E'] === '2001')) {
         this.xmppMediator = message.from;
         this.SetXmppStatus(4);
@@ -174,18 +174,18 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessageIn> {
   /// ..................................................................................................................
   private SetXmppStatus(Value: number): void {
     if (this.xmppStatus !== Value) {
-      console.log('XMPP Status ', this.xmppStatus, '=>', Value, XmppWebsocket.statusDesc[Value]);
+      //console.log('XMPP Status ', this.xmppStatus, '=>', Value, XmppWebsocket.statusDesc[Value]);
       this.xmppStatus = Value;
       this.connectionObserver.next(Value);
     } else {
-      console.log('XMPP Stay in Status ', Value);
+      //console.log('XMPP Stay in Status ', Value);
     }
   };
   private getMyFullName(): string {
     return this.currentXmppParam.jid + '/' + this.currentXmppParam.resource;
   }
   private connect(): void {
-    console.log('XmppWebsocket:connect');
+    //console.log('XmppWebsocket:connect');
     try {
       this.xmppClient.connect();
     } catch (err) {
@@ -195,27 +195,27 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessageIn> {
     }
   };
   private reconnect(): void {
-    console.log('XmppWebsocket:reconnect subscribe', this.xmppStatus);
+    //console.log('XmppWebsocket:reconnect subscribe', this.xmppStatus);
     this.reconnectionObservable = Observable.interval(this.reconnectInterval)
       .takeWhile((v, index) => {
-        console.log('reconnectionObservable.takeWhile Idx:', index, ' xmppStatus:', this.xmppStatus);
+        //console.log('reconnectionObservable.takeWhile Idx:', index, ' xmppStatus:', this.xmppStatus);
         return (index < this.reconnectAttempts) && (this.xmppStatus <= 0);
       });
     this.reconnectionObservable.subscribe(
       () => {
-        console.log('reconnectionObservable.Tick');
+        //console.log('reconnectionObservable.Tick');
         this.connect();
       },
       (error) => {
         console.error('reconnectionObservable.Error', error);
       },
       () => {
-        console.warn('reconnectionObservable:completed', this.xmppStatus);
+        //console.warn('reconnectionObservable:completed', this.xmppStatus);
         /// release reconnectionObservable. so can start again after next disconnect !
         this.reconnectionObservable = null;
         if (this.xmppStatus <= 0) {
           /// if the ALL reconnection attempts are failed, then we call complete of our Subject and status
-          console.error('XmppWebsocket:NO WAY TO Connect');
+          //console.error('XmppWebsocket:NO WAY TO Connect');
           this.SetXmppStatus(-9);
           //this.connectionObserver.complete();
           //this.complete();
@@ -236,7 +236,7 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessageIn> {
    * send Helo to desti
    */
   public helo(desti: string): void {
-    console.log('XmppWebsocket:helo', this.xmppStatus);
+    //console.log('XmppWebsocket:helo', this.xmppStatus);
     try {
       const my = this.getMyFullName();
       const msg = new rmxMsg.XmppRmxMessageOut();
@@ -291,7 +291,7 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessageIn> {
    * ask wanted view via xmpp message to mediator
    */
   public helo2Mediator(): void {
-    console.log('XmppWebsocket:helo2Mediator', this.xmppStatus);
+    //console.log('XmppWebsocket:helo2Mediator', this.xmppStatus);
     try {
       const msg = new rmxMsg.XmppRmxMessageOut();
       msg.buildMediatorHelo(this.xmppMediator, this.getMyFullName());
@@ -310,7 +310,7 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessageIn> {
    * @param data
    */
   public sendMsg2Mediator(cmd: string, data: string): void {
-    console.log('XmppWebsocket:sendMsg2Mediator', this.xmppStatus);
+    //console.log('XmppWebsocket:sendMsg2Mediator', this.xmppStatus);
     try {
       const msg = new rmxMsg.XmppRmxMessageOut();
       msg.buildMediatorCmd(this.xmppMediator, cmd, this.getMyFullName());
@@ -325,7 +325,7 @@ export class XmppWebsocket extends Subject<rmxMsg.XmppRmxMessageIn> {
 
 
   public sendLoginCreator(): void {
-    console.log('XmppWebsocket:sendLoginCreator', this.xmppStatus);
+    //console.log('XmppWebsocket:sendLoginCreator', this.xmppStatus);
     try {
       const msg = new rmxMsg.XmppRmxMessageOut();
       msg.buildLoginCreator(this.xmppMediator, this.xmppParam.jid, this.getMyFullName());

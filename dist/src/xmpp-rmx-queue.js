@@ -6,6 +6,7 @@
  */
 var QueueManager = (function () {
     function QueueManager() {
+        this.RPCCallID = [];
     }
     QueueManager.prototype.set = function (xmppCall) {
         this.RPCCallID.push(xmppCall);

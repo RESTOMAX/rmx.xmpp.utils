@@ -7,7 +7,7 @@ import { rmxIntf } from './xmpp-rmx-interfaces';
  * QueueManager
  */
 export class QueueManager implements rmxIntf.IxmppQueueManager {
-    RPCCallID: Array<rmxIntf.IxmppCall>;
+    RPCCallID: Array<rmxIntf.IxmppCall> = [];
 
     set(xmppCall: rmxIntf.IxmppCall): number {
         this.RPCCallID.push(xmppCall);

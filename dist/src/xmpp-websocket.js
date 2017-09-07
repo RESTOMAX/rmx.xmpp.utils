@@ -31,7 +31,7 @@ var XmppWebsocket = (function (_super) {
         _this.reconnectAttempts = 5; /// number of connection attempts
         _this.reconnectionObservable = null;
         _this.hasBeenLogged = false;
-        console.log('XmppWebsocket Create');
+        //console.log('XmppWebsocket Create');
         /// connection status
         _this.connectionStatus = new Observable(function (observer) {
             _this.connectionObserver = observer;
@@ -60,7 +60,7 @@ var XmppWebsocket = (function (_super) {
                 _this.CreateStanzioClient(_this.xmppParam);
             }
             else if ((!_this.reconnectionObservable) && (_this.xmppStatus === 0) && (_this.jabberLoginCreating)) {
-                console.log('Start To create a new JabberLogin');
+                //console.log('Start To create a new JabberLogin');
                 _this.CreateStanzioClient(_this.defaultXmppParam);
             }
             else if ((!_this.reconnectionObservable) && (_this.xmppStatus === -1) && (!_this.jabberLoginCreating)) {
@@ -69,7 +69,7 @@ var XmppWebsocket = (function (_super) {
                 _this.xmppClient.disconnect();
             }
             else if ((!_this.reconnectionObservable) && (_this.xmppStatus === 4) && (_this.jabberLoginCreating)) {
-                console.log('Send request to create Jabber Login');
+                //console.log('Send request to create Jabber Login');
                 _this.sendLoginCreator();
             }
             else if ((!_this.reconnectionObservable) && (_this.xmppStatus === 4) && (!_this.jabberLoginCreating)) {
@@ -104,7 +104,7 @@ var XmppWebsocket = (function (_super) {
             _this.SetXmppStatus(-1);
         });
         this.xmppClient.on('auth:success', function () {
-            console.log('XmppWebsocket:auth:success: ' + _this.currentXmppParam.jid);
+            //console.log('XmppWebsocket:auth:success: ' + this.currentXmppParam.jid);
             _this.SetXmppStatus(1);
         });
         this.xmppClient.on('session:started', function () {
@@ -115,7 +115,7 @@ var XmppWebsocket = (function (_super) {
             _this.helo2Mediator();
         });
         this.xmppClient.on('disconnected', function (e, err) {
-            console.log('XmppWebsocket:disconnected: ' + _this.currentXmppParam.jid);
+            //console.log('XmppWebsocket:disconnected: ' + this.currentXmppParam.jid);
             if (e)
                 console.warn(e);
             if (err)
@@ -135,7 +135,7 @@ var XmppWebsocket = (function (_super) {
             var s = message.body;
             //console.log(s);
             var msg = new rmxMsg.XmppRmxMessageIn(s);
-            console.log('XmppWebsocket:message: ' + JSON.stringify(msg));
+            //console.log('XmppWebsocket:message: ' + JSON.stringify(msg));
             if (msg.cmd === 'MEDIATOR_OK' || (msg.cmd === 'PEERERROR' && msg.params['E'] === '2001')) {
                 _this.xmppMediator = message.from;
                 _this.SetXmppStatus(4);
@@ -159,12 +159,12 @@ var XmppWebsocket = (function (_super) {
     /// ..................................................................................................................
     XmppWebsocket.prototype.SetXmppStatus = function (Value) {
         if (this.xmppStatus !== Value) {
-            console.log('XMPP Status ', this.xmppStatus, '=>', Value, XmppWebsocket.statusDesc[Value]);
+            //console.log('XMPP Status ', this.xmppStatus, '=>', Value, XmppWebsocket.statusDesc[Value]);
             this.xmppStatus = Value;
             this.connectionObserver.next(Value);
         }
         else {
-            console.log('XMPP Stay in Status ', Value);
+            //console.log('XMPP Stay in Status ', Value);
         }
     };
     ;
@@ -172,7 +172,7 @@ var XmppWebsocket = (function (_super) {
         return this.currentXmppParam.jid + '/' + this.currentXmppParam.resource;
     };
     XmppWebsocket.prototype.connect = function () {
-        console.log('XmppWebsocket:connect');
+        //console.log('XmppWebsocket:connect');
         try {
             this.xmppClient.connect();
         }
@@ -185,24 +185,24 @@ var XmppWebsocket = (function (_super) {
     ;
     XmppWebsocket.prototype.reconnect = function () {
         var _this = this;
-        console.log('XmppWebsocket:reconnect subscribe', this.xmppStatus);
+        //console.log('XmppWebsocket:reconnect subscribe', this.xmppStatus);
         this.reconnectionObservable = Observable.interval(this.reconnectInterval)
             .takeWhile(function (v, index) {
-            console.log('reconnectionObservable.takeWhile Idx:', index, ' xmppStatus:', _this.xmppStatus);
+            //console.log('reconnectionObservable.takeWhile Idx:', index, ' xmppStatus:', this.xmppStatus);
             return (index < _this.reconnectAttempts) && (_this.xmppStatus <= 0);
         });
         this.reconnectionObservable.subscribe(function () {
-            console.log('reconnectionObservable.Tick');
+            //console.log('reconnectionObservable.Tick');
             _this.connect();
         }, function (error) {
             console.error('reconnectionObservable.Error', error);
         }, function () {
-            console.warn('reconnectionObservable:completed', _this.xmppStatus);
+            //console.warn('reconnectionObservable:completed', this.xmppStatus);
             /// release reconnectionObservable. so can start again after next disconnect !
             _this.reconnectionObservable = null;
             if (_this.xmppStatus <= 0) {
                 /// if the ALL reconnection attempts are failed, then we call complete of our Subject and status
-                console.error('XmppWebsocket:NO WAY TO Connect');
+                //console.error('XmppWebsocket:NO WAY TO Connect');
                 _this.SetXmppStatus(-9);
                 //this.connectionObserver.complete();
                 //this.complete();
@@ -222,7 +222,7 @@ var XmppWebsocket = (function (_super) {
      * send Helo to desti
      */
     XmppWebsocket.prototype.helo = function (desti) {
-        console.log('XmppWebsocket:helo', this.xmppStatus);
+        //console.log('XmppWebsocket:helo', this.xmppStatus);
         try {
             var my = this.getMyFullName();
             var msg = new rmxMsg.XmppRmxMessageOut();
@@ -279,7 +279,7 @@ var XmppWebsocket = (function (_super) {
      * ask wanted view via xmpp message to mediator
      */
     XmppWebsocket.prototype.helo2Mediator = function () {
-        console.log('XmppWebsocket:helo2Mediator', this.xmppStatus);
+        //console.log('XmppWebsocket:helo2Mediator', this.xmppStatus);
         try {
             var msg = new rmxMsg.XmppRmxMessageOut();
             msg.buildMediatorHelo(this.xmppMediator, this.getMyFullName());
@@ -298,7 +298,7 @@ var XmppWebsocket = (function (_super) {
      * @param data
      */
     XmppWebsocket.prototype.sendMsg2Mediator = function (cmd, data) {
-        console.log('XmppWebsocket:sendMsg2Mediator', this.xmppStatus);
+        //console.log('XmppWebsocket:sendMsg2Mediator', this.xmppStatus);
         try {
             var msg = new rmxMsg.XmppRmxMessageOut();
             msg.buildMediatorCmd(this.xmppMediator, cmd, this.getMyFullName());
@@ -313,7 +313,7 @@ var XmppWebsocket = (function (_super) {
     };
     ;
     XmppWebsocket.prototype.sendLoginCreator = function () {
-        console.log('XmppWebsocket:sendLoginCreator', this.xmppStatus);
+        //console.log('XmppWebsocket:sendLoginCreator', this.xmppStatus);
         try {
             var msg = new rmxMsg.XmppRmxMessageOut();
             msg.buildLoginCreator(this.xmppMediator, this.xmppParam.jid, this.getMyFullName());
