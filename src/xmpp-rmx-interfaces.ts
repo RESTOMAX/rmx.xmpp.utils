@@ -28,9 +28,14 @@ export namespace rmxIntf {
     dataJson: any;
     params: any;
     rawparams?: any;
+    requestParams?: any;
     parse(rawMessage: string): boolean;
   }
 
+  // ..................................................................................................................
+  /**
+   * IxmppRmxMessage
+   */
   export interface IxmppRmxMessageParams {
     Param?: string;
     MSG: string;
@@ -46,6 +51,29 @@ export namespace rmxIntf {
     CMAXNum: string;
     UserAgent: string;
     Ver: string;
+  }
+
+  // ..................................................................................................................
+  /**
+   * IxmppCall
+   */
+  export interface IxmppCall {
+    Params: Object;
+    Cmd: string;
+    StartDte: Date;
+    RequestParams?: any;
+  }
+
+  // ..................................................................................................................
+  /**
+   * IxmppQueueManager
+   */
+  export interface IxmppQueueManager {
+    RPCCallID: Array<IxmppCall>;
+    set(xmppCall: IxmppCall): number;
+    get(index: number): IxmppCall;
+    cancel(n: number): void;
+    clear(): void;
   }
 
   // ..................................................................................................................

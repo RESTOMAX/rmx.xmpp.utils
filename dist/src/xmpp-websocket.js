@@ -16,6 +16,7 @@ import 'rxjs/add/operator/takeWhile';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/share';
 import { rmxMsg } from './xmpp-rmx-message';
+import { QueueManager } from './xmpp-rmx-queue';
 /// we inherit from the ordinary Subject
 var XmppWebsocket = (function (_super) {
     __extends(XmppWebsocket, _super);
@@ -47,6 +48,7 @@ var XmppWebsocket = (function (_super) {
         this.defaultXmppParam = defaultXmppParam;
         this.xmppParam = xmppParam;
         this.currentXmppParam = xmppParam;
+        this.queueManager = new QueueManager();
         /// create stanza.io xmppClient and map event to myself
         /// we follow the connection status and run the reconnect while losing the connection
         this.CreateStanzioClient(this.currentXmppParam);
@@ -78,6 +80,10 @@ var XmppWebsocket = (function (_super) {
                 console.info('JabberLogin Created');
                 _this.jabberLoginCreating = false;
                 _this.xmppClient.disconnect();
+            }
+            if ((!_this.reconnectionObservable) && (_this.xmppStatus === -9) && (!_this.jabberLoginCreating)) {
+                _this.hasBeenLogged = false;
+                _this.reconnect();
             }
         });
     };
@@ -141,7 +147,8 @@ var XmppWebsocket = (function (_super) {
                 return;
             }
             else if (msg.cmd === 'ANSWER') {
-                ///--- TODO ---///
+                // remove from waiting queue
+                msg.requestParams = _this.queueManager.get(parseInt(msg.dataJson.Q));
             }
             _this.next(msg);
         });
@@ -197,8 +204,8 @@ var XmppWebsocket = (function (_super) {
                 /// if the ALL reconnection attempts are failed, then we call complete of our Subject and status
                 console.error('XmppWebsocket:NO WAY TO Connect');
                 _this.SetXmppStatus(-9);
-                _this.connectionObserver.complete();
-                _this.complete();
+                //this.connectionObserver.complete();
+                //this.complete();
             }
         });
     };
@@ -227,28 +234,38 @@ var XmppWebsocket = (function (_super) {
      * @param cmd
      * @param data
      */
-    XmppWebsocket.prototype.sendMsg = function (cmd, params, dates) {
+    XmppWebsocket.prototype.sendMsg = function (cmd, params, dates, requestParams) {
+        var _this = this;
         //console.log('XmppWebsocket:sendMsg', this.xmppStatus);
-        try {
-            var my = this.getMyFullName();
-            var msg = new rmxMsg.XmppRmxMessageOut();
-            msg.buildCmd(this.xmppMediator.full || my, cmd, my);
-            // list and add request params
-            for (var key in params) {
-                msg.addParam(key, params[key]);
+        var queueIndex = 0;
+        return new Promise(function (resolve, reject) {
+            try {
+                var my = _this.getMyFullName();
+                var msg = new rmxMsg.XmppRmxMessageOut();
+                msg.buildCmd(_this.xmppMediator.full || my, cmd, my);
+                // list and add request params
+                for (var key in params) {
+                    msg.addParam(key, params[key]);
+                }
+                // list and add request dates
+                for (var key in dates) {
+                    msg.addDateParam(key, dates[key]);
+                }
+                // add L and queue number to request
+                queueIndex = _this.queueManager.set({ Cmd: cmd, Params: params, StartDte: new Date(), RequestParams: requestParams });
+                msg.addParam('L', '1');
+                msg.addParam('Q', queueIndex.toString());
+                // send request
+                _this.xmppClient.sendMessage(msg);
+                resolve(queueIndex);
             }
-            // list and add request dates
-            for (var key in dates) {
-                msg.addDateParam(key, dates[key]);
+            catch (err) {
+                /// in case of an error with a loss of connection, we restore it
+                console.error('XmppWebsocket:sendMsg:error:' + err);
+                _this.SetXmppStatus(-9);
+                reject('XmppWebsocket:sendMsg:error:' + err);
             }
-            msg.body += '<L:1>';
-            this.xmppClient.sendMessage(msg);
-        }
-        catch (err) {
-            /// in case of an error with a loss of connection, we restore it
-            console.error('XmppWebsocket:sendMsg:error:' + err);
-            this.SetXmppStatus(-9);
-        }
+        });
     };
     ;
     /**

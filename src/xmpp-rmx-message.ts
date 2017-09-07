@@ -23,6 +23,7 @@ export namespace rmxMsg {
     public data: string;
     public params:any = {};
     public rawparams:any = {};
+    public requestParams:any;
     
     /// ..................................................................................................................
     /**
