@@ -24,11 +24,11 @@ var XmppWebsocket = (function (_super) {
     function XmppWebsocket() {
         var _this = _super.call(this) || this;
         _this.xmppStatus = 0;
+        _this.reconnectInterval = 9000;
+        //private readonly reconnectAttempts = 5;     /// number of connection attempts
         _this.xmppClient = null;
         _this.xmppMediator = null;
         _this.jabberLoginCreating = false;
-        _this.reconnectInterval = 10000; /// pause between connections
-        _this.reconnectAttempts = 5; /// number of connection attempts
         _this.reconnectionObservable = null;
         _this.hasBeenLogged = false;
         //console.log('XmppWebsocket Create');
@@ -53,41 +53,36 @@ var XmppWebsocket = (function (_super) {
         /// we follow the connection status and run the reconnect while losing the connection
         this.CreateStanzioClient(this.currentXmppParam);
         this.connectionStatusSubs = this.connectionStatus.subscribe(function () {
-            if ((!_this.reconnectionObservable) && (_this.xmppStatus === 0) && (!_this.jabberLoginCreating) && (_this.hasBeenLogged)) {
-                _this.reconnect();
+            if ((_this.xmppStatus === 0) && (!_this.jabberLoginCreating) && (_this.hasBeenLogged)) {
+                //---
             }
-            else if ((!_this.reconnectionObservable) && (_this.xmppStatus === 0) && (!_this.jabberLoginCreating) && (!_this.hasBeenLogged)) {
+            else if ((_this.xmppStatus === 0) && (!_this.jabberLoginCreating) && (!_this.hasBeenLogged)) {
                 _this.CreateStanzioClient(_this.xmppParam);
             }
-            else if ((!_this.reconnectionObservable) && (_this.xmppStatus === 0) && (_this.jabberLoginCreating)) {
+            else if ((_this.xmppStatus === 0) && (_this.jabberLoginCreating)) {
                 //console.log('Start To create a new JabberLogin');
                 _this.CreateStanzioClient(_this.defaultXmppParam);
             }
-            else if ((!_this.reconnectionObservable) && (_this.xmppStatus === -1) && (!_this.jabberLoginCreating)) {
+            else if ((_this.xmppStatus === -1) && (!_this.jabberLoginCreating)) {
                 // AuthError, we create new login
                 _this.jabberLoginCreating = true;
                 _this.xmppClient.disconnect();
             }
-            else if ((!_this.reconnectionObservable) && (_this.xmppStatus === 4) && (_this.jabberLoginCreating)) {
+            else if ((_this.xmppStatus === 4) && (_this.jabberLoginCreating)) {
                 //console.log('Send request to create Jabber Login');
                 _this.sendLoginCreator();
-                _this.timerConnect.cancel();
-                _this.timerConnect = null;
             }
-            else if ((!_this.reconnectionObservable) && (_this.xmppStatus === 4) && (!_this.jabberLoginCreating)) {
+            else if ((_this.xmppStatus === 4) && (!_this.jabberLoginCreating)) {
                 console.info('Conneced and XMPP session is opened');
                 _this.hasBeenLogged = true;
-                _this.timerConnect.cancel();
-                _this.timerConnect = null;
             }
-            else if ((!_this.reconnectionObservable) && (_this.xmppStatus === 5)) {
+            else if ((_this.xmppStatus === 5)) {
                 console.info('JabberLogin Created');
                 _this.jabberLoginCreating = false;
                 _this.xmppClient.disconnect();
             }
-            else if ((!_this.reconnectionObservable) && (_this.xmppStatus === -9) && (!_this.jabberLoginCreating)) {
+            else if ((_this.xmppStatus === -9) && (!_this.jabberLoginCreating)) {
                 _this.hasBeenLogged = false;
-                _this.reconnect();
             }
         });
     };
@@ -158,7 +153,8 @@ var XmppWebsocket = (function (_super) {
         });
         /// we connect
         console.info('XmppWebsocket Created => Connect');
-        this.connect();
+        if (!this._reconnectionObservable)
+            this.connect();
     };
     /// ..................................................................................................................
     XmppWebsocket.prototype.SetXmppStatus = function (Value) {
@@ -176,48 +172,44 @@ var XmppWebsocket = (function (_super) {
         return this.currentXmppParam.jid + '/' + this.currentXmppParam.resource;
     };
     XmppWebsocket.prototype.connect = function () {
-        //console.log('XmppWebsocket:connect');
-        try {
-            this.timerConnect = setTimeout(this.checkStatus, 9000);
-            this.xmppClient.connect();
-        }
-        catch (err) {
-            /// in case of an error with a loss of connection, we restore it
-            console.error('XmppWebsocket:error:' + err);
-            this.SetXmppStatus(-9);
-        }
-    };
-    ;
-    XmppWebsocket.prototype.checkStatus = function () {
-        if (this.xmppStatus !== 4) {
-            this.connect();
-        }
-    };
-    XmppWebsocket.prototype.reconnect = function () {
         var _this = this;
         //console.log('XmppWebsocket:reconnect subscribe', this.xmppStatus);
-        this.reconnectionObservable = Observable.interval(this.reconnectInterval)
-            .takeWhile(function (v, index) {
-            //console.log('reconnectionObservable.takeWhile Idx:', index, ' xmppStatus:', this.xmppStatus);
-            return (index < _this.reconnectAttempts) && (_this.xmppStatus <= 0);
-        });
-        this.reconnectionObservable.subscribe(function () {
-            //console.log('reconnectionObservable.Tick');
-            _this.connect();
-        }, function (error) {
-            console.error('reconnectionObservable.Error', error);
-        }, function () {
-            //console.warn('reconnectionObservable:completed', this.xmppStatus);
-            /// release reconnectionObservable. so can start again after next disconnect !
-            _this.reconnectionObservable = null;
-            if (_this.xmppStatus <= 0) {
-                /// if the ALL reconnection attempts are failed, then we call complete of our Subject and status
-                //console.error('XmppWebsocket:NO WAY TO Connect');
-                _this.SetXmppStatus(-9);
-                //this.connectionObserver.complete();
-                //this.complete();
-            }
-        });
+        if (!this.reconnectionObservable) {
+            this.reconnectionObservable = Observable.interval(this.reconnectInterval)
+                .takeWhile(function (v, index) {
+                //console.log('reconnectionObservable.takeWhile Idx:', index, ' xmppStatus:', this.xmppStatus);
+                return true; //(index < this.reconnectAttempts) && (this.xmppStatus <= 0);
+            });
+        }
+        if (!this._reconnectionObservable) {
+            this._reconnectionObservable = this.reconnectionObservable.subscribe(function () {
+                //console.log('reconnectionObservable.Tick');
+                try {
+                    if (_this.xmppStatus <= 0)
+                        _this.xmppClient.connect();
+                }
+                catch (err) {
+                    /// in case of an error with a loss of connection, we restore it
+                    console.error('XmppWebsocket:error:' + err);
+                    _this.SetXmppStatus(-9);
+                }
+            }, function (error) {
+                console.error('reconnectionObservable.Error', error);
+            }, function () {
+                //console.warn('reconnectionObservable:completed', this.xmppStatus);
+                /// release reconnectionObservable. so can start again after next disconnect !
+                _this.reconnectionObservable = null;
+                /*
+                if (this.xmppStatus <= 0) {
+                  /// if the ALL reconnection attempts are failed, then we call complete of our Subject and status
+                  //console.error('XmppWebsocket:NO WAY TO Connect');
+                  this.SetXmppStatus(-9);
+                  //this.connectionObserver.complete();
+                  //this.complete();
+                }
+                */
+            });
+        }
     };
     ;
     /// ..................................................................................................................
@@ -260,24 +252,29 @@ var XmppWebsocket = (function (_super) {
         var queueIndex = 0;
         return new Promise(function (resolve, reject) {
             try {
-                var my = _this.getMyFullName();
-                var msg = new rmxMsg.XmppRmxMessageOut();
-                msg.buildCmd(_this.xmppMediator.full || my, cmd, my);
-                // list and add request params
-                for (var key in params) {
-                    msg.addParam(key, params[key]);
+                if (_this.xmppStatus <= 0) {
+                    reject('XmppWebsocket:sendMsg:error: Socket not connected');
                 }
-                // list and add request dates
-                for (var key in dates) {
-                    msg.addDateParam(key, dates[key]);
+                else {
+                    var my = _this.getMyFullName();
+                    var msg = new rmxMsg.XmppRmxMessageOut();
+                    msg.buildCmd(_this.xmppMediator.full || my, cmd, my);
+                    // list and add request params
+                    for (var key in params) {
+                        msg.addParam(key, params[key]);
+                    }
+                    // list and add request dates
+                    for (var key in dates) {
+                        msg.addDateParam(key, dates[key]);
+                    }
+                    // add L and queue number to request
+                    queueIndex = _this.queueManager.set({ Cmd: cmd, Params: params, StartDte: new Date(), RequestParams: requestParams });
+                    msg.addParam('L', '1');
+                    msg.addParam('Q', queueIndex.toString());
+                    // send request and start sendTimeout
+                    _this.xmppClient.sendMessage(msg);
+                    resolve(queueIndex);
                 }
-                // add L and queue number to request
-                queueIndex = _this.queueManager.set({ Cmd: cmd, Params: params, StartDte: new Date(), RequestParams: requestParams });
-                msg.addParam('L', '1');
-                msg.addParam('Q', queueIndex.toString());
-                // send request
-                _this.xmppClient.sendMessage(msg);
-                resolve(queueIndex);
             }
             catch (err) {
                 /// in case of an error with a loss of connection, we restore it
@@ -340,15 +337,16 @@ var XmppWebsocket = (function (_super) {
     };
     ;
     XmppWebsocket.statusDesc = {
-        '-10': 'LoginCreatorError',
-        '-9': 'Error',
-        '-1': 'AuthError',
-        '0': 'Disconnected',
-        '1': 'Connected',
-        '2': 'Session Started',
-        '3': 'Wait Mediator',
-        '4': 'Mediator OK',
-        '5': 'Jabber Login as created'
+        '-10': 'XMPP Login Creator Error',
+        '-9': 'XMPP Connection Error',
+        '-2': 'XMPP Request Send Error after 9 seconds',
+        '-1': 'XMPP Authentification Error',
+        '0': 'XMPP Disconnected',
+        '1': 'XMPP Connected',
+        '2': 'XMPP Session Started',
+        '3': 'XMPP Wait Mediator',
+        '4': 'XMPP Mediator OK',
+        '5': 'XMPP Jabber Login as created'
     };
     return XmppWebsocket;
 }(Subject));
